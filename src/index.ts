@@ -1,10 +1,10 @@
 import { fromEvent, Observable, Observer } from "rxjs";
 
-const onMouseMove$ = fromEvent<MouseEvent>(document, "mousemove");
+const onKeyDown$ = fromEvent<KeyboardEvent>(document, "keydown");
 
-const observer: Observer<MouseEvent> = {
-  next: (event:MouseEvent) => console.log({x:event.x,y:event.y}),
+const observer: Observer<KeyboardEvent> = {
+  next: (event:KeyboardEvent) => console.log(event.key),
   error: (error) => console.log(error),
   complete: () => console.log("complete"),
 }
-onMouseMove$.subscribe(observer);
+onKeyDown$.subscribe(observer);
