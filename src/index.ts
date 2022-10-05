@@ -1,17 +1,10 @@
-import { Observable, Observer } from "rxjs";
-const observableAlpha$ = new Observable<number|string>((subscriber) => {
-  subscriber.next("Alpha");
-  subscriber.next("Beta");
-  subscriber.next(1);
-  subscriber.next("Gamma");
-  subscriber.complete();
-});
+import { fromEvent, Observable, Observer } from "rxjs";
 
-const observer:Observer<number | string>  = {
-  next: (value:number | string) => value,
-  error: (error:any) => console.log(error),
-  complete: () => console.log("Completed")
+const onMouseMove$ = fromEvent<MouseEvent>(document, "mousemove");
+
+const observer: Observer<MouseEvent> = {
+  next: (event:MouseEvent) => console.log({x:event.x,y:event.y}),
+  error: (error) => console.log(error),
+  complete: () => console.log("complete"),
 }
-
-observableAlpha$.subscribe(observer);
-
+onMouseMove$.subscribe(observer);
