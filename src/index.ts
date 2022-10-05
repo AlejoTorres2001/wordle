@@ -7,6 +7,7 @@ const numbers$: Observable<number> = new Observable(
 );
 const randomNumbersSubject$ = new Subject<number>();
 
+
 const ob1: Observer<number> = {
   next: (value) => console.log(value),
 
@@ -19,12 +20,7 @@ const ob2: Observer<number> = {
   error: (error) => console.log(error),
   complete: () => console.log("complete"),
 };
-
-
-numbers$.subscribe(ob1);
-numbers$.subscribe(ob2);
-
 randomNumbersSubject$.subscribe(ob1);
 randomNumbersSubject$.subscribe(ob2);
 
-randomNumbersSubject$.next(Math.random());
+numbers$.subscribe(randomNumbersSubject$)
