@@ -1,10 +1,30 @@
-import { fromEvent, Observable, Observer } from "rxjs";
+import { fromEvent, Observable, Observer, Subject } from "rxjs";
 
-const onKeyDown$ = fromEvent<KeyboardEvent>(document, "keydown");
+const numbers$: Observable<number> = new Observable(
+  (subscriber: Observer<number>) => {
+    subscriber.next(Math.random());
+  }
+);
+const randomNumbersSubject$ = new Subject<number>();
 
-const observer: Observer<KeyboardEvent> = {
-  next: (event:KeyboardEvent) => console.log(event.key),
+const ob1: Observer<number> = {
+  next: (value) => console.log(value),
+
   error: (error) => console.log(error),
   complete: () => console.log("complete"),
-}
-onKeyDown$.subscribe(observer);
+};
+
+const ob2: Observer<number> = {
+  next: (value) => console.log(value),
+  error: (error) => console.log(error),
+  complete: () => console.log("complete"),
+};
+
+
+numbers$.subscribe(ob1);
+numbers$.subscribe(ob2);
+
+randomNumbersSubject$.subscribe(ob1);
+randomNumbersSubject$.subscribe(ob2);
+
+randomNumbersSubject$.next(Math.random());
