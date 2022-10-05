@@ -24,3 +24,5 @@ randomNumbersSubject$.subscribe(ob1);
 randomNumbersSubject$.subscribe(ob2);
 
 numbers$.subscribe(randomNumbersSubject$)
+
+randomNumbersSubject$.next(1);
