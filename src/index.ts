@@ -7,12 +7,10 @@ import {
   isWordCorrect,
   setMessage,
 } from "./services";
+import { initGame } from "./services/InitGame";
 
-let letterIndex = 0;
-let letterRowIndex = 0;
-let userAnswers: string[] = [];
-let userAttempt: string[] = [];
-let rightWord = getRandomWord();
+let { letterIndex, letterRowIndex, userAnswers, userAttempt, rightWord } =
+  initGame();
 const letterRows = document.getElementsByClassName("letter-row");
 const restartButton = document.getElementById("restart-button");
 const onKeyDown$: Observable<KeyboardEvent> = fromEvent<KeyboardEvent>(
@@ -20,13 +18,18 @@ const onKeyDown$: Observable<KeyboardEvent> = fromEvent<KeyboardEvent>(
   "keydown"
 );
 const onRowCompleted$: Subject<onCompleteData> = new Subject();
-const onRestart$: Observable<MouseEvent> = fromEvent<MouseEvent>(restartButton,'click')
-const restartGame = {
-  next: (event:MouseEvent) => {
+const onRestart$: Observable<MouseEvent> = fromEvent<MouseEvent>(
+  restartButton,
+  "click"
+);
+const restartGame: Observer<MouseEvent> = {
+  next: (event: MouseEvent) => {
     event.preventDefault();
-    window.location.reload();
-  }
-}
+    location.reload();
+  },
+  complete: () => console.log("restart completed"),
+  error: (error: Error) => console.log(error),
+};
 const insertLetter: Observer<KeyboardEvent> = {
   next: (event: KeyboardEvent) => {
     const pressedKey = event.key.toUpperCase();
@@ -71,7 +74,7 @@ const deleteLetter: Observer<KeyboardEvent> = {
     console.error(error);
   },
 };
-onRestart$.subscribe(restartGame)
+onRestart$.subscribe(restartGame);
 onKeyDown$.subscribe(insertLetter);
 onKeyDown$.subscribe(deleteLetter);
 onRowCompleted$.subscribe((data: onCompleteData) => {
