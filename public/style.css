@@ -8,6 +8,7 @@
   --yellow: #f8cc32;
   --green-transparent-dark: rgba(133, 179, 54, 0.15);
   --green-transparent-light: rgba(133, 179, 54, 0.25);
+  --skyblue: rgba(56, 189, 248, 1);
   --inter-font: "Inter", sans-serif;
 }
 
@@ -117,4 +118,21 @@ body {
   50% {
     transform: scale(1.1);
   }
+}
+.white-board-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+gap: 25px;
+  text-align: center;
+}
+.restart-button:hover {
+  box-shadow: 0px 0px 20px 5px rgba(133, 179, 54, 0.25);
+}
+.canvas {
+  box-shadow: 0px 0px 30px -1px var(--skyblue);
+  background: var(--blue-dark);
+  border-radius: 25px;
+  cursor: crosshair;
 }
