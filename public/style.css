@@ -77,10 +77,12 @@ body {
   justify-content: center;
 }
 
-.message-text {
-  color: white;
+.message-text-error {
+  color: red;
 }
-
+.message-text-success {
+  color: var(--green);
+}
 .restart-container {
   display: flex;
   justify-content: center;
