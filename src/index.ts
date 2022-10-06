@@ -1,10 +1,12 @@
 import { fromEvent, Observable, Observer, Subject } from "rxjs";
 import { onCompleteData } from "./@types";
-import { checkLetters } from "./services/checkLetters";
-import { getRandomWord } from "./services/getRandomWord";
-import { isLetter } from "./services/isLetter";
-import { isWordCorrect } from "./services/isWordCorrect";
-import { setMessage } from "./services/setMessage";
+import {
+  checkLetters,
+  getRandomWord,
+  isLetter,
+  isWordCorrect,
+  setMessage,
+} from "./services";
 
 let letterIndex = 0;
 let letterRowIndex = 0;
