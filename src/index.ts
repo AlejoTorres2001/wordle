@@ -2,7 +2,6 @@ import { fromEvent, Observable, Observer, Subject } from "rxjs";
 import { onCompleteData } from "./@types";
 import {
   checkLetters,
-  getRandomWord,
   isLetter,
   isWordCorrect,
   setMessage,
@@ -79,7 +78,6 @@ onKeyDown$.subscribe(insertLetter);
 onKeyDown$.subscribe(deleteLetter);
 onRowCompleted$.subscribe((data: onCompleteData) => {
   const { userAnswer, letterRowIndex } = data;
-  console.log(userAnswer, rightWord, letterIndex);
   const letters = [...Array.from(letterRows[letterRowIndex].children)];
   checkLetters(letters, rightWord);
   if (!isWordCorrect(userAnswer, rightWord) && letterRowIndex !== 5) return;
