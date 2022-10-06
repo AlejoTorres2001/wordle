@@ -20,7 +20,13 @@ const onKeyDown$: Observable<KeyboardEvent> = fromEvent<KeyboardEvent>(
   "keydown"
 );
 const onRowCompleted$: Subject<onCompleteData> = new Subject();
-
+const onRestart$: Observable<MouseEvent> = fromEvent<MouseEvent>(restartButton,'click')
+const restartGame = {
+  next: (event:MouseEvent) => {
+    event.preventDefault();
+    window.location.reload();
+  }
+}
 const insertLetter: Observer<KeyboardEvent> = {
   next: (event: KeyboardEvent) => {
     const pressedKey = event.key.toUpperCase();
@@ -65,6 +71,7 @@ const deleteLetter: Observer<KeyboardEvent> = {
     console.error(error);
   },
 };
+onRestart$.subscribe(restartGame)
 onKeyDown$.subscribe(insertLetter);
 onKeyDown$.subscribe(deleteLetter);
 onRowCompleted$.subscribe((data: onCompleteData) => {
