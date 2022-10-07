@@ -136,3 +136,51 @@ gap: 25px;
   border-radius: 25px;
   cursor: crosshair;
 }
+.go-to-white-board-container{
+    position: absolute;
+    bottom: 10%;
+    right: 5%;
+}
+.go-to-white-board-container button{
+    background-color: var(--green);
+    border-radius: 10px;
+    font-size: 1rem;
+    padding: 0.5rem 2rem;
+    font-family: var(--inter-font);
+    border: 0;
+    transition: box-shadow 300ms ease;
+    box-shadow: 0px 0px 20px 5px var(--green-transparent-dark);
+    vertical-align: middle;
+    display: inline-block;
+}
+.go-to-white-board-container button:hover{
+    box-shadow: 0px 0px 20px 5px var(--green-transparent-light);
+    cursor: pointer;
+}
+.icon{
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    display: inline-block;
+}
+.back-to-wordle-container{
+  position: absolute;
+    bottom: 10%;
+    left: 5%;
+}
+.back-to-wordle-container button{
+  background-color: var(--green);
+    border-radius: 10px;
+    font-size: 1rem;
+    padding: 0.5rem 2rem;
+    font-family: var(--inter-font);
+    border: 0;
+    transition: box-shadow 300ms ease;
+    box-shadow: 0px 0px 20px 5px var(--green-transparent-dark);
+    vertical-align: middle;
+    display: inline-block;
+}
+.back-to-wordle-container button:hover{
+  box-shadow: 0px 0px 20px 5px var(--green-transparent-light);
+  cursor: pointer;
+}
