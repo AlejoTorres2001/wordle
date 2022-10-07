@@ -1,12 +1,12 @@
-import { fromEvent, Observable, Observer, Subject } from "rxjs";
+import { fromEvent, Observable, Observer, Subject, takeUntil } from "rxjs";
 import { onCompleteData } from "./@types";
 import {
   checkLetters,
   isLetter,
   isWordCorrect,
   setMessage,
-} from "./services";
-import { initGame } from "./services/InitGame";
+} from "./services/wordle";
+import { initGame } from "./services/wordle/InitGame";
 
 let { letterIndex, letterRowIndex, userAnswers, userAttempt, rightWord } =
   initGame();
@@ -17,6 +17,8 @@ const onKeyDown$: Observable<KeyboardEvent> = fromEvent<KeyboardEvent>(
   "keydown"
 );
 const onRowCompleted$: Subject<onCompleteData> = new Subject();
+const onWinOrLoose$: Subject<string> = new Subject();
+
 const onRestart$: Observable<MouseEvent> = fromEvent<MouseEvent>(
   restartButton,
   "click"
@@ -73,18 +75,21 @@ const deleteLetter: Observer<KeyboardEvent> = {
     console.error(error);
   },
 };
-onRestart$.subscribe(restartGame);
-onKeyDown$.subscribe(insertLetter);
-onKeyDown$.subscribe(deleteLetter);
-onRowCompleted$.subscribe((data: onCompleteData) => {
+const checkRows = (data: onCompleteData) => {
   const { userAnswer, letterRowIndex } = data;
-  const letters = [...Array.from(letterRows[letterRowIndex].children)];
+  const letters = Array.from(letterRows[letterRowIndex].children)
   checkLetters(letters, rightWord);
   if (!isWordCorrect(userAnswer, rightWord) && letterRowIndex !== 5) return;
   if (isWordCorrect(userAnswer, rightWord)) {
     setMessage("success", "Correct!");
+    onWinOrLoose$.next("success");
   } else if (letterRowIndex === 5) {
     setMessage("error", `Game over! The word was ${rightWord}`);
+    onWinOrLoose$.next("error");
   }
   restartButton.removeAttribute("disabled");
-});
+}
+onRowCompleted$.subscribe(checkRows);
+onRestart$.subscribe(restartGame);
+onKeyDown$.pipe(takeUntil(onWinOrLoose$)).subscribe(insertLetter);
+onKeyDown$.pipe(takeUntil(onWinOrLoose$)).subscribe(deleteLetter);
