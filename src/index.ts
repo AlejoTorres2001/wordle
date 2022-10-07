@@ -1,15 +1,27 @@
-import { fromEvent, Observable, Observer, Subject, takeUntil } from "rxjs";
+import {
+  fromEvent,
+  merge,
+  Observable,
+  Observer,
+  Subject,
+  takeUntil,
+} from "rxjs";
 import { onCompleteData } from "./@types";
 import {
   checkLetters,
+  getRandomWord,
   isLetter,
   isWordCorrect,
   setMessage,
+  cleanGrid,
 } from "./services/wordle";
-import { initGame } from "./services/wordle/InitGame";
 
-let { letterIndex, letterRowIndex, userAnswers, userAttempt, rightWord } =
-  initGame();
+let letterIndex = 0;
+let letterRowIndex = 0;
+let userAnswers: string[] = [];
+let userAttempt: string[] = [];
+let rightWord = getRandomWord();
+
 const letterRows = document.getElementsByClassName("letter-row");
 const restartButton = document.getElementById("restart-button");
 const onKeyDown$: Observable<KeyboardEvent> = fromEvent<KeyboardEvent>(
@@ -23,14 +35,8 @@ const onRestart$: Observable<MouseEvent> = fromEvent<MouseEvent>(
   restartButton,
   "click"
 );
-const restartGame: Observer<MouseEvent> = {
-  next: (event: MouseEvent) => {
-    event.preventDefault();
-    location.reload();
-  },
-  complete: () => console.log("restart completed"),
-  error: (error: Error) => console.log(error),
-};
+const onLoadWindow$ = fromEvent(window, "load");
+
 const insertLetter: Observer<KeyboardEvent> = {
   next: (event: KeyboardEvent) => {
     const pressedKey = event.key.toUpperCase();
@@ -77,7 +83,7 @@ const deleteLetter: Observer<KeyboardEvent> = {
 };
 const checkRows = (data: onCompleteData) => {
   const { userAnswer, letterRowIndex } = data;
-  const letters = Array.from(letterRows[letterRowIndex].children)
+  const letters = Array.from(letterRows[letterRowIndex].children);
   checkLetters(letters, rightWord);
   if (!isWordCorrect(userAnswer, rightWord) && letterRowIndex !== 5) return;
   if (isWordCorrect(userAnswer, rightWord)) {
@@ -88,8 +94,30 @@ const checkRows = (data: onCompleteData) => {
     onWinOrLoose$.next("error");
   }
   restartButton.removeAttribute("disabled");
-}
-onRowCompleted$.subscribe(checkRows);
-onRestart$.subscribe(restartGame);
-onKeyDown$.pipe(takeUntil(onWinOrLoose$)).subscribe(insertLetter);
-onKeyDown$.pipe(takeUntil(onWinOrLoose$)).subscribe(deleteLetter);
+};
+const restartWordle$ = merge(onRestart$, onLoadWindow$).subscribe(() => {
+  onRowCompletedSubscription.unsubscribe();
+  onKeyDownInsertSubscription.unsubscribe();
+  onKeyDownDeleteSubscription.unsubscribe();
+  onRowCompletedSubscription = onRowCompleted$.subscribe(checkRows);
+  onKeyDownInsertSubscription = onKeyDown$
+    .pipe(takeUntil(onWinOrLoose$))
+    .subscribe(insertLetter);
+  onKeyDownDeleteSubscription = onKeyDown$
+    .pipe(takeUntil(onWinOrLoose$))
+    .subscribe(deleteLetter);
+  letterIndex = 0;
+  letterRowIndex = 0;
+  userAnswers = [];
+  userAttempt = [];
+  rightWord = getRandomWord();
+  cleanGrid(letterRows);
+  setMessage("reset", "");
+});
+let onRowCompletedSubscription = onRowCompleted$.subscribe(checkRows);
+let onKeyDownInsertSubscription = onKeyDown$
+  .pipe(takeUntil(onWinOrLoose$))
+  .subscribe(insertLetter);
+let onKeyDownDeleteSubscription = onKeyDown$
+  .pipe(takeUntil(onWinOrLoose$))
+  .subscribe(deleteLetter);
