@@ -41,14 +41,26 @@ let startPaintSubscription = startPaint$.subscribe(paintStroke);
 
 const onLoadWindows$ = fromEvent(window, "load");
 const onRestart$ = fromEvent(restartButton, "click");
-
+let onWordleClick = fromEvent(
+  document.getElementsByClassName("back-to-wordle-button"),
+  "click"
+).subscribe(() => {
+  window.location.href = "index.html";
+});
 const restartWhiteBoard$ = merge(onRestart$, onLoadWindows$).subscribe(() => {
   startPaintSubscription.unsubscribe();
   onMouseDownSubscription.unsubscribe();
+  onWordleClick.unsubscribe();
   const ctx = getCanvasContext("id-reactive-canvas");
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   startPaintSubscription = startPaint$.subscribe(paintStroke);
   onMouseDownSubscription = onMouseDown$.subscribe((event: MouseEvent) =>
     updateCursorPosition(cursorPosition, offSet, event)
   );
+  onWordleClick = fromEvent(
+    document.getElementsByClassName("back-to-wordle-button"),
+    "click"
+  ).subscribe(() => {
+    window.location.href = "index.html";
+  });
 });

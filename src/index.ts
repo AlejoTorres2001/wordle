@@ -24,6 +24,10 @@ let rightWord = getRandomWord();
 
 const letterRows = document.getElementsByClassName("letter-row");
 const restartButton = document.getElementById("restart-button");
+const whiteBoardButton = document.getElementsByClassName(
+  "go-to-white-board-button"
+);
+const onWhiterBoardClick$ = fromEvent<MouseEvent>(whiteBoardButton, "click");
 const onKeyDown$: Observable<KeyboardEvent> = fromEvent<KeyboardEvent>(
   document,
   "keydown"
@@ -99,6 +103,7 @@ const restartWordle$ = merge(onRestart$, onLoadWindow$).subscribe(() => {
   onRowCompletedSubscription.unsubscribe();
   onKeyDownInsertSubscription.unsubscribe();
   onKeyDownDeleteSubscription.unsubscribe();
+  onWhiterBoardClickSubscription.unsubscribe();
   onRowCompletedSubscription = onRowCompleted$.subscribe(checkRows);
   onKeyDownInsertSubscription = onKeyDown$
     .pipe(takeUntil(onWinOrLoose$))
@@ -106,6 +111,9 @@ const restartWordle$ = merge(onRestart$, onLoadWindow$).subscribe(() => {
   onKeyDownDeleteSubscription = onKeyDown$
     .pipe(takeUntil(onWinOrLoose$))
     .subscribe(deleteLetter);
+  onWhiterBoardClickSubscription = onWhiterBoardClick$.subscribe(() => {
+    window.location.href = "board.html";
+  });
   letterIndex = 0;
   letterRowIndex = 0;
   userAnswers = [];
@@ -121,3 +129,7 @@ let onKeyDownInsertSubscription = onKeyDown$
 let onKeyDownDeleteSubscription = onKeyDown$
   .pipe(takeUntil(onWinOrLoose$))
   .subscribe(deleteLetter);
+
+let onWhiterBoardClickSubscription = onWhiterBoardClick$.subscribe(() => {
+  window.location.href = "board.html";
+});
