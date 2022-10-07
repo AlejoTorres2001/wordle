@@ -1,11 +1,15 @@
-import { fromEvent, map, mergeAll, takeUntil } from "rxjs";
+import { fromEvent, map, merge, mergeAll, takeUntil } from "rxjs";
 import { Position } from "./@types";
-import { configureContext, updateCursorPosition } from "./services/canvas";
+import {
+  configureContext,
+  getCanvasContext,
+  updateCursorPosition,
+} from "./services/canvas";
 
 const canvas = document.getElementById(
   "id-reactive-canvas"
 ) as HTMLCanvasElement;
-
+const restartButton = document.getElementById("restart-button");
 const cursorPosition: Position = { x: 0, y: 0 };
 const offSet = {
   offsetLeft: canvas.offsetLeft,
@@ -30,7 +34,21 @@ const startPaint$ = onMouseDown$.pipe(
   map(() => onMouseOver$),
   mergeAll()
 );
-onMouseDown$.subscribe((event: MouseEvent) =>
+let onMouseDownSubscription = onMouseDown$.subscribe((event: MouseEvent) =>
   updateCursorPosition(cursorPosition, offSet, event)
 );
-startPaint$.subscribe(paintStroke);
+let startPaintSubscription = startPaint$.subscribe(paintStroke);
+
+const onLoadWindows$ = fromEvent(window, "load");
+const onRestart$ = fromEvent(restartButton, "click");
+
+const restartWhiteBoard$ = merge(onRestart$, onLoadWindows$).subscribe(() => {
+  startPaintSubscription.unsubscribe();
+  onMouseDownSubscription.unsubscribe();
+  const ctx = getCanvasContext("id-reactive-canvas");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  startPaintSubscription = startPaint$.subscribe(paintStroke);
+  onMouseDownSubscription = onMouseDown$.subscribe((event: MouseEvent) =>
+    updateCursorPosition(cursorPosition, offSet, event)
+  );
+});
