@@ -8,9 +8,34 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div id="how-to-play-dialog-container" class="how-to-play-dialog-container">
+      <div class="how-to-play-content">
+        <div class="how-to-play-dialog-title">
+          <h2>How To Play Wordle</h2>
+        </div>
+        <div class="how-to-play-dialog-body">
+          <p>
+            Wordle is a simple game where you have to guess a word.You will have 6 attempts to guess it.
+            each time you complete a guess row the board will give you hints as described below:
+          <p>
+          <span><b style="color: yellow;">yellow</b></span>
+          : your letter is fine but in the wrong place</p>
+          <p>
+          <span><b style="color: gray;">gray</b></span>
+            
+            : your letter is not in the word :(</p>
+          <p> 
+            
+          <span><b style="color: green;">green</b></span>
+          : you hit the spot!</p>
+
+        </div>
+      </div>
+    </div>
+    <div id="page-mask"></div>
     <div class="how-to-play-container">
       <button class="how-to-play-button">
-        <img src="assets/question-mark-draw-svgrepo-com.svg" alt="icon">
+        <img src="assets/question-mark-draw-svgrepo-com.svg" alt="icon" />
       </button>
     </div>
     <h1 class="web-title">Wordle</h1>

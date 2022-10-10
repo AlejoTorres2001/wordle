@@ -27,6 +27,10 @@ const restartButton = document.getElementById("restart-button");
 const whiteBoardButton = document.getElementsByClassName(
   "go-to-white-board-button"
 );
+const howToPlayButton = document.getElementsByClassName("how-to-play-button");
+const howToPlayDialog = document.getElementById("how-to-play-dialog-container");
+const pageMask = document.getElementById("page-mask");
+const onPageMaskClick$ = fromEvent(pageMask, "click");
 const onWhiterBoardClick$ = fromEvent<MouseEvent>(whiteBoardButton, "click");
 const onKeyDown$: Observable<KeyboardEvent> = fromEvent<KeyboardEvent>(
   document,
@@ -37,6 +41,10 @@ const onWinOrLoose$: Subject<string> = new Subject();
 
 const onRestart$: Observable<MouseEvent> = fromEvent<MouseEvent>(
   restartButton,
+  "click"
+);
+const onHowToPlayClick$: Observable<MouseEvent> = fromEvent<MouseEvent>(
+  howToPlayButton,
   "click"
 );
 const onLoadWindow$ = fromEvent(window, "load");
@@ -133,3 +141,11 @@ let onKeyDownDeleteSubscription = onKeyDown$
 let onWhiterBoardClickSubscription = onWhiterBoardClick$.subscribe(() => {
   window.location.href = "board.html";
 });
+let onPageMaskClickSubscription = onPageMaskClick$.subscribe(() => {
+  pageMask.classList.remove("page-mask");
+  howToPlayDialog.style.display = "none";
+})
+let onHowToPlayClickSubscription = onHowToPlayClick$.subscribe(() => {
+  pageMask.classList.add("page-mask");
+  howToPlayDialog.style.display = "flex";
+})
