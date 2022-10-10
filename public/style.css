@@ -138,7 +138,7 @@ gap: 25px;
 }
 .go-to-white-board-container{
     position: absolute;
-    bottom: 10%;
+    bottom: 5%;
     right: 5%;
 }
 .go-to-white-board-container button{
@@ -165,8 +165,8 @@ gap: 25px;
 }
 .back-to-wordle-container{
   position: absolute;
-    bottom: 10%;
-    left: 5%;
+    bottom: 5%;
+    right: 5%;
 }
 .back-to-wordle-container button{
   background-color: var(--green);
@@ -183,4 +183,14 @@ gap: 25px;
 .back-to-wordle-container button:hover{
   box-shadow: 0px 0px 20px 5px var(--green-transparent-light);
   cursor: pointer;
+}
+.how-to-play-container button{
+  display:block;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--gray);
+  background-color: var(--blue-dark);
+  margin: 15px ;
+  
 }
