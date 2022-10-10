@@ -192,5 +192,12 @@ gap: 25px;
   border: 1px solid var(--gray);
   background-color: var(--blue-dark);
   margin: 15px ;
+  transition: box-shadow 300ms ease;
+  
+}
+.how-to-play-container button:hover{
+  cursor: pointer;
+  box-shadow: 0px 0px 20px 5px var(--green-transparent-light);
+  cursor: pointer;
   
 }
